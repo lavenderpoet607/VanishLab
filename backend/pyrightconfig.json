@@ -1,0 +1,12 @@
+{
+  "venvPath": "c:/Users/user/Documents/project/VanishLab",
+  "venv": ".venv",
+  "extraPaths": [
+    "c:/Users/user/Documents/project/VanishLab/.venv/Lib/site-packages",
+    "c:/Users/user/Documents/project/VanishLab/backend",
+    "../.venv/Lib/site-packages",
+    "."
+  ],
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic"
+}

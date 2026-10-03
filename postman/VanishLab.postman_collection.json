@@ -1,0 +1,306 @@
+{
+  "info": {
+    "_postman_id": "vanishlab-api-collection-v1",
+    "name": "VanishLab API",
+    "description": "Collection for VanishLab API - AI Watermark Removal, Media Downloader, and Quota Management.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new user account with default 50 daily quota."
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.access_token) {",
+                  "        pm.environment.set('access_token', data.access_token);",
+                  "        console.log('access_token automatically saved to environment!');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Authenticate user and automatically save JWT access_token to Postman environment."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile (/me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Retrieve current authenticated user details."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Quota Management",
+      "item": [
+        {
+          "name": "Check Quota Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/quota",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "quota"]
+            },
+            "description": "Check current daily quota, remaining quota, used quota today, and next reset timestamp."
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Quota",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/quota/reset",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "quota", "reset"]
+            },
+            "description": "Manually resets used quota back to 0 (restoring full 50 requests) for development and testing."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Clean Media Downloader",
+      "item": [
+        {
+          "name": "Submit Downloader Job",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 202) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.task_id) {",
+                  "        pm.environment.set('task_id', data.task_id);",
+                  "        console.log('task_id automatically saved: ' + data.task_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://www.tiktok.com/@username/video/1234567890\",\n  \"extract_audio_only\": false,\n  \"crop_watermark_bars\": false,\n  \"max_resolution\": \"1080p\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/downloader/process",
+              "host": ["{{base_url}}"],
+              "path": ["downloader", "process"]
+            },
+            "description": "Submit a media link (TikTok, Instagram, YouTube) to strip watermarks."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. AI Watermark Inpainter",
+      "item": [
+        {
+          "name": "Submit Inpainting Job",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 202) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.task_id) {",
+                  "        pm.environment.set('task_id', data.task_id);",
+                  "        console.log('task_id automatically saved: ' + data.task_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select the source image file"
+                },
+                {
+                  "key": "mask",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select the binary mask image file (white=remove, black=keep)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/inpaint/image",
+              "host": ["{{base_url}}"],
+              "path": ["inpaint", "image"]
+            },
+            "description": "Submit image and binary mask to run LaMa inpainting."
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Video Inpainting Job",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 202) {",
+                  "    var data = pm.response.json();",
+                  "    if (data.task_id) {",
+                  "        pm.environment.set('task_id', data.task_id);",
+                  "        console.log('task_id automatically saved: ' + data.task_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "video",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select the source video file (MP4, MOV, MKV, WebM)"
+                },
+                {
+                  "key": "corner_preset",
+                  "value": "bottom_right",
+                  "type": "text",
+                  "description": "Corner preset: bottom_right (TikTok/Reels), top_right, bottom_left, top_left"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/inpaint/video",
+              "host": ["{{base_url}}"],
+              "path": ["inpaint", "video"]
+            },
+            "description": "Submit video to remove watermark logos with lossless audio preservation."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5. Task Status & Results",
+      "item": [
+        {
+          "name": "Get Task Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tasks/{{task_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["tasks", "{{task_id}}"]
+            },
+            "description": "Poll status (queued, processing, completed, failed) and retrieve presigned download URLs."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
