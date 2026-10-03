@@ -13,6 +13,7 @@ htmlcov/
 *.env.*.local
 cookies.txt
 linkedin_post.txt
+linkedin_banner.jpg
 
 *.db
 vanishlab.db
