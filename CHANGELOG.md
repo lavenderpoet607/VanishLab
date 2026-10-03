@@ -7,7 +7,7 @@ All notable changes to **VanishLab** are documented in this file following the [
 ## [1.3.0] - 2026-10-03
 
 ### Added
-- **3D Animated Splash Screen**: Implemented calibrated 3.6-second entrance screen featuring perspective 3D rotation, spring-scale bouncy entrance, ambient neon radial glow, and dynamic staged loading indicator (`Memuat modul AI deep learning...` to `Siap digunakan!`).
+- **3D Animated Splash Screen**: Implemented calibrated 3.6-second entrance screen featuring perspective 3D rotation, spring-scale bouncy entrance, ambient neon radial glow, and dynamic staged loading indicator (`"Loading deep learning AI modules..."` to `"Ready to use!"`).
 - **Interactive Onboarding Experience**: Created 3-step carousel presentation with rich 3D illustration cards, feature chips (*Brush & Custom Box*, *Generative Fill*, *60 FPS Lossless*), smooth pill indicators, Skip navigation, and local completion persistence via `SharedPreferences`.
 - **Standardized 3D Logo Component**: Built `AppLogo3D` widget providing three standard size presets (`small: 32px`, `standard: 72px`, `large: 112px`) with subtle ambient neon glows and squircle clipping.
 - **Android 3D Launcher Icons & Adaptive Icons**: Rendered and deployed 3D launcher icons across all mipmap densities (`mdpi`, `hdpi`, `xhdpi`, `xxhdpi`, `xxxhdpi`) including circular icons and API 26+ adaptive icon definitions (`res/mipmap-anydpi-v26/`).
@@ -32,7 +32,7 @@ All notable changes to **VanishLab** are documented in this file following the [
   - Preset Corner buttons overlaying visual target boxes.
   - Interactive Draggable Custom Box Editor with percentage sliders.
   - Interactive Multi-tool Brush/Box/Lasso canvas over the exact video aspect ratio (16:9, 9:16 vertical Reels/TikTok, 1:1 square).
-- **Dual-Corner Watermark Preset**: Added `tiktok_both` (`Kedua Sudut`) preset to simultaneously remove watermarks alternating between Top-Left and Bottom-Right corners.
+- **Dual-Corner Watermark Preset**: Added `tiktok_both` ("Both Corners") preset to simultaneously remove watermarks alternating between Top-Left and Bottom-Right corners.
 - **Lossless Audio & FPS Preservation**: Maintained original audio stream and frame rate during video reconstruction.
 
 ### Fixed

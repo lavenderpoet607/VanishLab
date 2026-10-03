@@ -1,11 +1,11 @@
 # VanishLab Backend Engine
 > **High-Concurrency AI Watermark Remover & Clean Media Downloader**
 
-VanishLab adalah backend berskala produksi yang dirancang khusus untuk memproses pengunduhan media bersih tanpa watermark dan penghapusan watermark gambar serta video berbasis deep learning (LaMa ONNX & Video Inpainting) secara asinkron (*non-blocking*) dan terdistribusi.
+VanishLab is a production-grade backend engineered for asynchronous, non-blocking media processing. It powers watermark-free video downloads and deep-learning image and video inpainting (LaMa ONNX & Video Inpainting) over a distributed task queue.
 
 ---
 
-## 🏗️ 1. Arsitektur Sistem
+## 🏗️ 1. System Architecture
 
 ```mermaid
 flowchart TD
@@ -56,7 +56,7 @@ flowchart TD
 
 ---
 
-## 📁 2. Struktur Direktori
+## 📁 2. Directory Structure
 
 ```text
 backend/
@@ -99,12 +99,12 @@ backend/
 │   └── main.py                     # FastAPI Application Entrypoint & Healthcheck
 ├── models_weights/                 # Directory for ONNX Model Weights (e.g. big-lama.onnx)
 ├── scripts/
-│   ├── download_model.py           # Skrip otomatis pengunduh bobot AI LaMa
-│   ├── start_daemon.py             # Skrip peluncur silent daemon background
-│   ├── stop_daemon.py              # Skrip penghenti silent daemon background
-│   ├── install_autostart.bat       # Skrip pendaftaran ke Windows Startup
-│   └── uninstall_autostart.bat     # Skrip penghapusan dari Windows Startup
-├── run_silent.vbs                  # Peluncur VBScript tanpa jendela terminal
+│   ├── download_model.py           # Automated model weight downloader for LaMa
+│   ├── start_daemon.py             # Silent background daemon runner
+│   ├── stop_daemon.py              # Background daemon terminator
+│   ├── install_autostart.bat       # Windows Startup registry installer
+│   └── uninstall_autostart.bat     # Windows Startup uninstaller
+├── run_silent.vbs                  # Windowless VBScript launcher
 ├── docker-compose.yml              # Complete Production Stack Orchestration
 ├── Dockerfile                      # Production Docker Image (FFmpeg + OpenCV + Py3.11)
 ├── requirements.txt                # Pinned Modern Dependencies
@@ -113,27 +113,27 @@ backend/
 
 ---
 
-## 🚀 3. Cara Menjalankan
+## 🚀 3. How to Run
 
-### Opsi A: Silent Background Mode (Otomatis & Tanpa Terminal)
+### Option A: Silent Background Mode (Automatic & Terminal-Free)
 
-Untuk menjalankan API secara hening di latar belakang tanpa jendela CMD/terminal:
+To run the API silently in the background without command prompt windows:
 
 ```bash
 wscript.exe backend/run_silent.vbs
 ```
 
-Untuk mendaftarkan API agar otomatis aktif setiap kali komputer menyala:
-Jalankan file `backend/scripts/install_autostart.bat`.
+To register the API to boot automatically with Windows:
+Run `backend/scripts/install_autostart.bat`.
 
-Untuk menghentikan background daemon jika diperlukan:
+To stop the background daemon when needed:
 ```bash
 python backend/scripts/stop_daemon.py
 ```
 
 ---
 
-### Opsi B: Docker Compose (Direkomendasikan untuk Produksi)
+### Option B: Docker Compose (Recommended for Production)
 
 ```bash
 cd backend
@@ -141,17 +141,17 @@ cp .env.example .env
 docker compose up --build -d
 ```
 
-Layanan yang aktif:
-- **FastAPI API**: `http://localhost:8000` (Swagger UI: `http://localhost:8000/docs`)
+Running services:
+- **FastAPI Backend**: `http://localhost:8000` (Swagger UI: `http://localhost:8000/docs`)
 - **MinIO S3 Console**: `http://localhost:9001` (User: `minioadmin` / Pass: `minioadmin`)
 - **PostgreSQL**: `localhost:5432`
 - **Redis**: `localhost:6379`
-- **Celery Worker**: 4 proses konkuren untuk video/AI processing
-- **Celery Beat**: Scheduler pembersihan otomatis file > 24 jam
+- **Celery Worker**: 4 concurrent worker processes for video/AI processing
+- **Celery Beat**: Periodic cleanup scheduler for files older than 24 hours
 
 ---
 
-### Opsi C: Menjalankan Manual di Terminal
+### Option C: Manual Terminal Execution
 
 ```bash
 cd backend
@@ -165,7 +165,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ---
 
-## 📡 4. Dokumentasi Endpoint Kunci
+## 📡 4. Key Endpoints Documentation
 
 ### 1. Submit Clean Media Downloader Job
 - **URL**: `POST /api/v1/downloader/process`
@@ -196,8 +196,8 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 - **Content-Type**: `multipart/form-data`
 - **Status Code**: `202 Accepted`
 - **Form Data**:
-  - `image`: File gambar asli (PNG/JPG/WebP)
-  - `mask`: File mask biner (Putih = Watermark yang dihapus, Hitam = Area yang dipertahankan)
+  - `image`: Original image file (PNG/JPG/WebP)
+  - `mask`: Binary mask file (White = Watermark to remove, Black = Retained image area)
 - **Response**:
 ```json
 {
@@ -210,11 +210,11 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ---
 
-### 3. Ekstraksi Live Preview Video
+### 3. Video Live Frame Extraction
 - **URL**: `POST /api/v1/inpaint/video/preview`
 - **Content-Type**: `multipart/form-data`
 - **Form Data**:
-  - `video`: File video (MP4/MOV/WebM)
+  - `video`: Video file (MP4/MOV/WebM)
 - **Response**:
 ```json
 {
@@ -231,18 +231,18 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ### 4. Submit AI Video Inpainting Job
 - **URL**: `POST /api/v1/inpaint/video`
-- **Autentikasi**: Wajib Bearer Token JWT
+- **Authentication**: JWT Bearer Token required
 - **Form Data**:
-  - `video`: File video asli
-  - `corner_preset`: `bottom_right`, `bottom_left`, `top_right`, `top_left`, atau `tiktok_both`
-  - `box_x`, `box_y`, `box_w`, `box_h`: Koordinat kotak kustom (opsional)
-  - `mask`: File mask biner kustom (opsional)
+  - `video`: Source video file
+  - `corner_preset`: `bottom_right`, `bottom_left`, `top_right`, `top_left`, or `tiktok_both`
+  - `box_x`, `box_y`, `box_w`, `box_h`: Custom bounding box coordinates (optional)
+  - `mask`: Custom binary mask file (optional)
 
 ---
 
-### 5. Polling Status Pekerjaan & Presigned Download URL
+### 5. Task Status Polling & Presigned Download URL
 - **URL**: `GET /api/v1/tasks/{task_id}`
-- **Response saat Sedang Memproses (`processing`)**:
+- **Response while processing (`processing`)**:
 ```json
 {
   "task_id": "a92e622b-23eb-46c5-a6e4-e3f7c10b784a",
@@ -255,7 +255,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
   "updated_at": "2026-10-03T04:30:10Z"
 }
 ```
-- **Response saat Selesai (`completed`)**:
+- **Response when completed (`completed`)**:
 ```json
 {
   "task_id": "a92e622b-23eb-46c5-a6e4-e3f7c10b784a",
@@ -291,7 +291,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ## 🛡️ 5. Standardized Error Handling
 
-Semua kegagalan sistem mengembalikan format JSON standar:
+All system exceptions return a standard JSON structure:
 ```json
 {
   "status": "error",
@@ -305,32 +305,32 @@ Semua kegagalan sistem mengembalikan format JSON standar:
 }
 ```
 
-Kode Error Standar:
-- `QUOTA_EXCEEDED` (HTTP 429): Melebihi jatah harian pengguna atau IP guest.
-- `EXTRACTION_FAILED` (HTTP 422): URL video tidak dapat diekstraksi / private / diblokir platform.
-- `INVALID_FILE` (HTTP 400): Tipe atau dimensi file tidak didukung atau korup.
-- `TASK_NOT_FOUND` (HTTP 404): ID pekerjaan tidak ditemukan.
-- `INPAINTING_FAILED` (HTTP 500): Kegagalan inferensi model AI.
-- `STORAGE_ERROR` (HTTP 502): Gangguan koneksi ke storage.
+Standard Error Codes:
+- `QUOTA_EXCEEDED` (HTTP 429): Daily limit reached for registered user or guest IP.
+- `EXTRACTION_FAILED` (HTTP 422): Video URL could not be extracted (private or platform blocked).
+- `INVALID_FILE` (HTTP 400): File type or dimensions unsupported or corrupted.
+- `TASK_NOT_FOUND` (HTTP 404): Task ID does not exist.
+- `INPAINTING_FAILED` (HTTP 500): AI model inference error.
+- `STORAGE_ERROR` (HTTP 502): Storage connection disruption.
 
 ---
 
 ## 🧹 6. Auto-Cleanup & Media Retention
 
-Pembersihan media sementara dilakukan melalui dua lapis:
-1. **Celery Beat Cron**: Berjalan setiap jam `crontab(minute=0)`. Memeriksa tabel `media_files` dengan query `expires_at <= NOW()` dan menghapus objek storage serta data record database.
-2. **Storage Orphan Scavenger**: Menghapus file lokal/S3 yang berumur lebih dari 24 jam meskipun tidak terdaftar di database.
+Ephemeral media cleanup runs across two layers:
+1. **Celery Beat Cron**: Executes hourly at `crontab(minute=0)`. Queries `media_files` where `expires_at <= NOW()` and purges storage objects as well as database rows.
+2. **Storage Orphan Scavenger**: Cleans local and S3 files older than 24 hours even if missing from database records.
 
 ---
 
 ## 📬 7. Postman Collection & Environment
 
-Konfigurasi Postman siap pakai tersedia di direktori `postman/`:
+Ready-to-use Postman files are located in the `postman/` directory:
 - **Collection**: `postman/VanishLab.postman_collection.json`
 - **Environment**: `postman/VanishLab.postman_environment.json`
 
-Fitur Otomatis di Postman:
-1. Saat menjalankan request **Login User**, token JWT otomatis tersimpan ke variable `{{access_token}}`.
-2. Semua request berikutnya (Quota, Downloader, Inpaint, Task) otomatis terotentikasi via `Bearer {{access_token}}`.
-3. Saat submit job (Downloader / Inpaint), `task_id` otomatis tersimpan ke `{{task_id}}` untuk langsung di-poll di request **Get Task Status**.
-4. Tersedia request **Reset Quota** (`POST /api/v1/auth/quota/reset`) untuk mereset kuota pengujian secara instan.
+Automated Postman Features:
+1. Running **Login User** automatically persists the JWT token into `{{access_token}}`.
+2. Subsequent requests (Quota, Downloader, Inpaint, Task) automatically authenticate via `Bearer {{access_token}}`.
+3. Submitting jobs (Downloader / Inpaint) saves `task_id` into `{{task_id}}` for immediate polling in **Get Task Status**.
+4. Includes **Reset Quota** (`POST /api/v1/auth/quota/reset`) to reset test quotas on demand.

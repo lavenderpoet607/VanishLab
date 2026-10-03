@@ -18,56 +18,56 @@
 
 ## 🌟 Overview
 
-**VanishLab** adalah platform terintegrasi full-stack berskala produksi untuk membersihkan watermark dari media foto dan video berbasis AI deep learning, serta mengunduh media bersih tanpa watermark dari platform populer seperti TikTok, Instagram Reels, YouTube Shorts, dan Twitter/X.
+**VanishLab** is a production-ready, full-stack platform engineered to remove watermarks from photos and videos using deep learning, as well as download clean, watermark-free media from social platforms including TikTok, Instagram Reels, YouTube Shorts, and X/Twitter.
 
-Dibangun dengan arsitektur mikroservis terdistribusi (*asynchronous task queue*) yang mampu menangani beban pemrosesan komputasi video berat tanpa memblokir server API, dilengkapi splash screen 3D dinamis, sistem onboarding interaktif, dan layanan backend otomatis di latar belakang.
+Built on a distributed asynchronous microservice architecture, VanishLab handles compute-heavy video processing without blocking the API gateway. The platform features an interactive client interface with dynamic 3D animations, an onboarding flow, and background daemon execution.
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Key Features
 
 ### 1. 🖼️ AI Image Watermark Remover
-- **Multi-Tool Precision Canvas**: Dukungan *Brush*, *Drag Box*, dan *Lasso Polygon* untuk memilih watermark teks, logo, atau objek.
-- **Deep Learning Inpainting (LaMa ONNX)**: Menggunakan model *Large Mask Inpainting* dengan resolusi tinggi dan tekstur latar belakang sintetis yang mulus tanpa blur cacat.
-- **Interactive Before/After Slider**: Membandingkan hasil gambar asli dan gambar bersih secara langsung dengan slider interaktif.
+- **Multi-Tool Precision Canvas**: Support for Brush, Drag-Box, and Lasso Polygon selection to target text, logos, or unwanted objects.
+- **Deep Learning Inpainting (LaMa ONNX)**: Employs the Large Mask Inpainting model for high-resolution background synthesis with smooth textures and zero blur distortion.
+- **Interactive Before/After Slider**: Real-time side-by-side comparison between original and processed images.
 
 ### 2. 🎬 AI Video Watermark Remover
-- **Live Frame Preview Extraction**: Mengekstrak frame cuplikan video asli secara instan (`POST /api/v1/inpaint/video/preview`) dengan rasio aspek dinamis (16:9, 9:16 vertical TikTok/Reels, 1:1 square).
+- **Live Frame Preview Extraction**: Fast frame extraction (`POST /api/v1/inpaint/video/preview`) preserving aspect ratios (16:9 widescreen, 9:16 vertical Reels/TikTok, 1:1 square).
 - **Visual Inpainting Overlays**:
-  - **Corner Presets**: Menghapus watermark di sudut (Bottom-Right, Top-Left, dll.).
-  - **Bouncing Watermark Preset (`tiktok_both`)**: Menghapus watermark TikTok yang berpindah-pindah posisi di sudut atas-kiri dan bawah-kanan secara simultan.
-  - **Custom Draggable Box**: Memposisikan kotak seleksi interaktif dengan slider persentase.
-  - **Direct Brush on Video Frame**: Menggambar mask bebas langsung di atas video frame asli.
-- **Pristine Quality Preservation**: Menjaga kualitas resolusi, 60 FPS asli, dan stream audio lossless tanpa re-encoding yang merusak suara.
+  - **Corner Presets**: One-click selection for corner watermarks (Bottom-Right, Top-Left, etc.).
+  - **Bouncing Watermark Preset (`tiktok_both`)**: Simultaneous removal of alternating top-left and bottom-right corner watermarks.
+  - **Custom Draggable Box**: Percentage-based interactive bounding box editor.
+  - **Direct Brush on Video Frame**: Freehand mask painting directly over the extracted video frame.
+- **Pristine Quality Preservation**: Retains native resolution, original 60 FPS frame rates, and lossless audio streams without destructive re-encoding.
 
 ### 3. ⚡ Clean Media Downloader
-- **Universal URL Hub**: Ekstraksi video bersih dari TikTok, Instagram, YouTube, X/Twitter via `yt-dlp` dan FFmpeg stream processing.
-- **Video (MP4) & Audio (MP3)**: Opsi unduh video HD atau konversi langsung ke audio kualitas 320 kbps.
-- **Auto-Crop Watermark Bars**: Deteksi dan pemotongan otomatis garis hitam atau margin bertuliskan watermark.
+- **Universal URL Hub**: Direct watermark-free extraction from TikTok, Instagram, YouTube, and X/Twitter powered by `yt-dlp` and FFmpeg.
+- **Video (MP4) & Audio (MP3)**: Options for high-definition video download or conversion to 320 kbps audio.
+- **Auto-Crop Watermark Bars**: Automated detection and cropping of letterbox borders and edge watermark strips.
 
 ### 4. 🚀 3D Splash Screen & Onboarding
-- **3D Animated Splash Screen**: Logo 3D berputar pada sumbu perspektif dengan efek *spring bounce*, pendaran *ambient radial glow*, tipografi gradien brand, dan progress indicator adaptif dengan durasi terkalibrasi 3,6 detik.
-- **Interactive Onboarding Screen**: 3 slide pengenalan fitur dengan kartu ilustrasi 3D, chip fitur (*Brush & Custom Box*, *Generative Fill*, *60 FPS Lossless*), indikator halaman kapsul, dan tombol aksi terpadu dengan persistensi preferensi lokal.
-- **Standardized 3D App Logo**: Komponen `AppLogo3D` dengan 3 ukuran standar:
-  - `small` (32x32 px) pada Top Utility Bar
-  - `standard` (72x72 px) pada kartu dan dialog
-  - `large` (112x112 px) pada Splash Screen dan Onboarding
-- **Modern Adaptive Launcher Icons**: Icon launcher 3D dengan dukungan adaptive icon untuk Android 8.0 hingga Android 16 (`mipmap-anydpi-v26`).
+- **3D Animated Splash Screen**: Perspective 3D logo rotation with spring bounce dynamics, ambient radial glow, gradient typography, and a calibrated 3.6-second progress indicator.
+- **Interactive Onboarding Experience**: Three-step carousel presentation with 3D illustration cards, feature capability chips (Brush & Custom Box, Generative Fill, 60 FPS Lossless), and local persistence via `SharedPreferences`.
+- **Standardized 3D App Logo**: Centralized `AppLogo3D` widget with three size presets:
+  - `small` (32x32 px) on the Top Utility Bar
+  - `standard` (72x72 px) across dialogs and cards
+  - `large` (112x112 px) on Splash and Onboarding screens
+- **Modern Adaptive Launcher Icons**: 3D icons across all Android mipmap densities with adaptive icon support (`mipmap-anydpi-v26`).
 
 ### 5. 🔌 Auto-Run Background API Engine
-- **Silent Background Daemon**: Skrip `start_daemon.py` dan `run_silent.vbs` yang menjalankan server Uvicorn secara hening di latar belakang tanpa memunculkan jendela terminal (`CREATE_NO_WINDOW`).
-- **Windows Startup Integration**: Opsi pendaftaran ke Windows Startup (`install_autostart.bat`) agar API otomatis aktif setiap kali komputer menyala.
-- **Flutter Native Auto-Spawner**: Pada platform desktop, aplikasi Flutter mendeteksi ketersediaan API dan secara otomatis meluncurkannya di latar belakang.
-- **One-Click Runner**: Skrip `start_app_with_backend.bat` untuk menjalankan backend dan frontend sekaligus tanpa terminal tambahan.
+- **Silent Background Daemon**: `start_daemon.py` and `run_silent.vbs` execute Uvicorn silently in the background without terminal windows (`CREATE_NO_WINDOW`).
+- **Windows Startup Integration**: Optional registration (`install_autostart.bat`) to launch the API automatically on system boot.
+- **Flutter Native Auto-Spawner**: On desktop platforms, the Flutter app checks backend availability and launches the daemon automatically if needed.
+- **One-Click Launcher**: `start_app_with_backend.bat` script to boot both API and Flutter simultaneously.
 
 ### 6. 📊 Real-Time Task Tracker & Quota System
-- **Asynchronous Task Polling**: Pelacakan progres pekerjaan (0–100%) dengan status transisi (`queued` → `processing` → `completed` / `failed`).
-- **Presigned Download URLs**: Unduhan file aman dengan masa berlaku sementara.
-- **User Quota**: Jatah 50 request gratis harian per user/IP dengan atomic Redis rate limiting.
+- **Asynchronous Task Polling**: Progress tracking (0–100%) through discrete state transitions (`queued` → `processing` → `completed` / `failed`).
+- **Presigned Download URLs**: Secure, time-limited direct download links generated from object storage.
+- **User Quota**: Default 50 free daily requests per user/IP enforced via atomic Redis rate limiting.
 
 ---
 
-## 🏗️ Arsitektur Sistem
+## 🏗️ System Architecture
 
 ```mermaid
 flowchart TD
@@ -116,7 +116,7 @@ flowchart TD
 
 ---
 
-## 📁 Struktur Repositori
+## 📁 Repository Structure
 
 ```text
 VanishLab/
@@ -128,36 +128,36 @@ VanishLab/
 │   │   ├── schemas/                # Pydantic v2 Request/Response Schemas
 │   │   ├── services/               # Inpainting, Video Inpainting, Extractor, Quota, Retention
 │   │   └── workers/                # Celery App, Background Worker Tasks, Beat Schedules
-│   ├── models_weights/             # Bobot Model AI (big-lama.onnx)
-│   ├── scripts/                    # Skrip pengunduh bobot AI dan daemon background
-│   ├── run_silent.vbs              # Peluncur backend tanpa terminal
-│   ├── docker-compose.yml          # Stack orkestrasi Docker produksi
-│   ├── Dockerfile                  # Container backend (FFmpeg, OpenCV, Python 3.11)
-│   └── requirements.txt            # Dependensi Python
-├── frontend/                       # Aplikasi Klien Flutter (BLoC Pattern)
-│   ├── assets/                     # Asset grafis 3D (logo_3d, ilustrasi onboarding)
+│   ├── models_weights/             # AI Model Weights (big-lama.onnx)
+│   ├── scripts/                    # Model downloader and background daemon scripts
+│   ├── run_silent.vbs              # Windowless background launcher
+│   ├── docker-compose.yml          # Production Docker orchestration
+│   ├── Dockerfile                  # Container definition (FFmpeg, OpenCV, Python 3.11)
+│   └── requirements.txt            # Python dependencies
+├── frontend/                       # Flutter Client Application (BLoC Pattern)
+│   ├── assets/                     # 3D graphic assets (logo_3d, onboarding illustrations)
 │   ├── lib/
-│   │   ├── core/                   # Tema Dark Mode, Konfigurasi API, Network, Launcher Service
-│   │   ├── data/                   # Models & Repositories
-│   │   └── presentation/           # BLoC, Halaman (Inpaint, Downloader, Splash, Onboarding)
-│   ├── test/                       # Unit & Widget Test Suites
-│   └── pubspec.yaml                # Dependensi Flutter
-├── postman/                        # Koleksi Postman & Environment siap pakai
-├── start_app_with_backend.bat      # Peluncur satu klik (API + Flutter)
-├── CHANGELOG.md                    # Riwayat pembaruan & rilis
-├── CONTRIBUTING.md                 # Panduan kontribusi & standar kode
-├── LICENSE                         # Lisensi Open Source MIT
-├── README.md                       # Dokumentasi Utama
-└── SECURITY.md                     # Kebijakan keamanan & data retention
+│   │   ├── core/                   # Dark mode theme, API config, networking, launcher service
+│   │   ├── data/                   # Models and repository implementations
+│   │   └── presentation/           # BLoC, pages (Inpaint, Downloader, Splash, Onboarding)
+│   ├── test/                       # Unit and widget test suites
+│   └── pubspec.yaml                # Flutter dependencies and assets
+├── postman/                        # Postman collection and environment definitions
+├── start_app_with_backend.bat      # One-click dual launcher (API + Flutter)
+├── CHANGELOG.md                    # Release history and version notes
+├── CONTRIBUTING.md                 # Contribution guidelines and coding standards
+├── LICENSE                         # MIT Open Source License
+├── README.md                       # Main documentation
+└── SECURITY.md                     # Security policy and data retention rules
 ```
 
 ---
 
-## 🚀 Panduan Memulai Cepat
+## 🚀 Quick Start Guide
 
-### Opsi A: Jalankan Seluruh Stack dengan Docker Compose (Direkomendasikan)
+### Option A: Run Full Stack with Docker Compose (Recommended)
 
-Pastikan Docker & Docker Compose telah terpasang di sistem Anda:
+Ensure Docker and Docker Compose are installed on your system:
 
 ```bash
 cd backend
@@ -165,24 +165,24 @@ cp .env.example .env
 docker compose up --build -d
 ```
 
-Layanan yang aktif:
-- **FastAPI Backend**: `http://localhost:8000` (Dokumentasi Swagger: `http://localhost:8000/docs`)
+Active services:
+- **FastAPI Backend**: `http://localhost:8000` (Swagger docs: `http://localhost:8000/docs`)
 - **MinIO S3 Console**: `http://localhost:9001` (User: `minioadmin` / Pass: `minioadmin`)
 - **PostgreSQL**: `localhost:5432`
 - **Redis**: `localhost:6379`
-- **Celery Worker & Beat**: Menjalankan antrean tugas dan pembersihan berkala otomatis.
+- **Celery Worker & Beat**: Task queues and automated periodic cleanup.
 
 ---
 
-### Opsi B: Pengembangan Lokal (Manual & Otomatis)
+### Option B: Local Development
 
-#### 1. Menjalankan Backend:
-Untuk menjalankan server secara hening tanpa jendela terminal terbuka:
+#### 1. Running the Backend:
+To start the server silently without terminal windows:
 ```bash
 wscript.exe backend/run_silent.vbs
 ```
 
-Atau untuk menjalankan manual dengan log terminal interaktif:
+To run manually with live logs in your terminal:
 ```bash
 cd backend
 python -m venv .venv
@@ -193,19 +193,19 @@ python scripts/download_model.py
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Untuk mendaftarkan backend agar otomatis berjalan saat Windows booting:
+To configure the backend to start automatically on Windows boot:
 ```bash
 backend\scripts\install_autostart.bat
 ```
 
-#### 2. Menjalankan Frontend Flutter:
+#### 2. Running the Flutter Frontend:
 ```bash
 cd frontend
 flutter pub get
 flutter run -d emulator-5554
 ```
 
-Untuk menjalankan di target Windows Desktop atau Web:
+For Windows Desktop or Web:
 ```bash
 flutter run -d windows
 flutter run -d chrome
@@ -213,36 +213,36 @@ flutter run -d chrome
 
 ---
 
-## 📡 Ringkasan API Endpoint Utama
+## 📡 Key API Endpoints
 
-| Method | Endpoint | Deskripsi | Autentikasi |
+| Method | Endpoint | Description | Authentication |
 | :--- | :--- | :--- | :---: |
-| `POST` | `/api/v1/auth/register` | Pendaftaran akun baru | Publik |
-| `POST` | `/api/v1/auth/login` | Login & mendapatkan JWT Bearer Token | Publik |
-| `GET` | `/api/v1/auth/quota` | Cek sisa kuota harian & waktu reset | Token / IP |
-| `POST` | `/api/v1/downloader/process` | Submit tugas unduh media bersih | Token / IP |
-| `POST` | `/api/v1/inpaint/image` | Submit inpainting foto dengan mask | Token / IP |
-| `POST` | `/api/v1/inpaint/video/preview` | Ekstraksi cepat frame cuplikan video | Publik |
-| `POST` | `/api/v1/inpaint/video` | Submit inpainting pembersihan video | **Wajib Login** |
-| `GET` | `/api/v1/tasks/{task_id}` | Polling progres & ambil link unduh S3 | Publik |
+| `POST` | `/api/v1/auth/register` | User account registration | Public |
+| `POST` | `/api/v1/auth/login` | Login and obtain JWT Bearer Token | Public |
+| `GET` | `/api/v1/auth/quota` | Check remaining daily quota and reset timer | Token / IP |
+| `POST` | `/api/v1/downloader/process` | Submit clean media download task | Token / IP |
+| `POST` | `/api/v1/inpaint/image` | Submit image inpainting with mask | Token / IP |
+| `POST` | `/api/v1/inpaint/video/preview` | Fast frame and metadata extraction | Public |
+| `POST` | `/api/v1/inpaint/video` | Submit full video inpainting task | **Required** |
+| `GET` | `/api/v1/tasks/{task_id}` | Poll progress and retrieve presigned S3 URL | Public |
 
 ---
 
-## 🛡️ Kebijakan Keamanan & Privasi
+## 🛡️ Security & Privacy Policy
 
-- **Penyimpanan Sementara 24 Jam**: Seluruh media yang diunggah dan dihasilkan akan dihapus otomatis setelah 24 jam oleh Celery Beat scheduled retention worker.
-- **Akses Presigned S3**: File media tidak dapat diakses secara publik; hanya dapat diunduh melalui URL presigned dengan masa aktif terbatas.
-- **Proteksi SSRF & Validasi File**: URL downloader diperiksa terhadap IP privat/loopback dan file diverifikasi tipe MIME-nya sebelum diproses.
-- Untuk informasi lengkap, baca [SECURITY.md](SECURITY.md).
-
----
-
-## 🤝 Kontribusi
-
-Tertarik untuk berkontribusi? Silakan baca panduan lengkap pada [CONTRIBUTING.md](CONTRIBUTING.md) sebelum membuka pull request.
+- **24-Hour Ephemeral Storage**: All uploaded and generated media files are automatically removed after 24 hours by a scheduled Celery Beat worker.
+- **Presigned S3 Access**: Media files are not publicly accessible and can only be downloaded through short-lived presigned URLs.
+- **SSRF Protection & Media Validation**: Downloader URLs are checked against private and loopback IP ranges, and MIME types are strictly verified before processing.
+- For complete details, refer to [SECURITY.md](SECURITY.md).
 
 ---
 
-## 📄 Lisensi
+## 🤝 Contributing
 
-Proyek ini dilisensikan di bawah [Lisensi MIT](LICENSE).
+Contributions are welcome! Please read the complete guidelines in [CONTRIBUTING.md](CONTRIBUTING.md) before submitting a pull request.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
