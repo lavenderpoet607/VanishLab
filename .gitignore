@@ -16,7 +16,6 @@ linkedin_post.txt
 linkedin_banner.jpg
 
 *.db
-vanishlab.db
 backend/vanishlab.db
 backend/data/
 .agents/
