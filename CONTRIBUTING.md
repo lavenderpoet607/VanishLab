@@ -15,6 +15,7 @@ Thank you for your interest in contributing to **VanishLab**! We welcome bug rep
 ## 🛠️ Development Setup
 
 ### 1. Prerequisites
+
 - **Git**
 - **Docker & Docker Compose** (for full stack or backend dependencies)
 - **Python 3.11+** with virtual environment support
@@ -24,48 +25,57 @@ Thank you for your interest in contributing to **VanishLab**! We welcome bug rep
 ### 2. Backend Setup
 
 Clone repository and enter backend directory:
+
 ```bash
-git clone https://github.com/your-org/vanishlab.git
+git clone https://github.com/lavenderpoet607/vanishlab.git
 cd vanishlab/backend
 ```
 
 Create and activate virtual environment:
+
 ```bash
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
 Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 Configure environment variables:
+
 ```bash
 cp .env.example .env
 ```
 
 Optional download of AI inpainting model weights:
+
 ```bash
 python scripts/download_model.py
 ```
 
 Launch background dependencies (Postgres, Redis, MinIO):
+
 ```bash
 docker compose up -d postgres redis minio
 ```
 
 Run FastAPI development server:
+
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Run Celery worker in a separate terminal:
+
 ```bash
 celery -A app.workers.celery_app worker --loglevel=info --concurrency=4
 ```
 
 Or run the silent background daemon:
+
 ```bash
 wscript.exe run_silent.vbs
 ```
@@ -73,17 +83,20 @@ wscript.exe run_silent.vbs
 ### 3. Frontend Setup
 
 Enter frontend directory and fetch dependencies:
+
 ```bash
 cd ../frontend
 flutter pub get
 ```
 
 Run on connected Android device or emulator:
+
 ```bash
 flutter run -d emulator-5554
 ```
 
 Or run on desktop / web:
+
 ```bash
 flutter run -d windows
 flutter run -d chrome
@@ -109,6 +122,7 @@ We adhere to strict code quality and hygiene standards:
 Always verify test suites before submitting a Pull Request:
 
 ### Backend Checks
+
 ```bash
 cd backend
 python -m compileall app
@@ -116,6 +130,7 @@ pytest
 ```
 
 ### Frontend Checks
+
 ```bash
 cd frontend
 flutter analyze
