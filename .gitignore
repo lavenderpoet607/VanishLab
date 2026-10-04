@@ -18,6 +18,7 @@ linkedin_banner.jpg
 *.db
 backend/vanishlab.db
 backend/data/
+.agent/
 .agents/
 .vscode/
 backend/models_weights/*.onnx
