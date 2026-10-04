@@ -74,7 +74,7 @@ class _AuthDialogState extends State<AuthDialog> {
         return Dialog(
           backgroundColor: AppTheme.surfaceCard,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppTheme.radiusCard),
             side: const BorderSide(color: AppTheme.border),
           ),
           child: ConstrainedBox(
@@ -87,49 +87,97 @@ class _AuthDialogState extends State<AuthDialog> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.primary.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Icon(
-                                  Icons.lock_person,
-                                  color: AppTheme.accent,
-                                  size: 22,
+                              Text(
+                                _isLoginMode ? 'Sign In to VanishLab' : 'Create Free Account',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.textPrimary,
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  _isLoginMode ? 'Welcome Back' : 'Create Account',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
+                              const SizedBox(height: 4),
+                              Text(
+                                _isLoginMode
+                                    ? 'Access 50 high-speed AI requests daily.'
+                                    : 'Unlock 50 free watermark removals every day.',
+                                style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
                               ),
                             ],
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.close, size: 20),
+                          icon: const Icon(Icons.close_rounded, size: 20, color: AppTheme.textSecondary),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _isLoginMode
-                          ? 'Log in to access 50 high-speed AI requests daily.'
-                          : 'Sign up to unlock 50 free watermark removals every day.',
-                      style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary),
+                    const SizedBox(height: 18),
+
+                    Container(
+                      height: 38,
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceRaised,
+                        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+                        border: Border.all(color: AppTheme.border),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => setState(() => _isLoginMode = true),
+                              borderRadius: BorderRadius.circular(AppTheme.radiusControl - 2),
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: _isLoginMode ? AppTheme.surfaceCard : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(AppTheme.radiusControl - 2),
+                                  border: _isLoginMode ? Border.all(color: AppTheme.border) : null,
+                                ),
+                                child: Text(
+                                  'Sign In',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: _isLoginMode ? FontWeight.w600 : FontWeight.w500,
+                                    color: _isLoginMode ? AppTheme.textPrimary : AppTheme.textSecondary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => setState(() => _isLoginMode = false),
+                              borderRadius: BorderRadius.circular(AppTheme.radiusControl - 2),
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: !_isLoginMode ? AppTheme.surfaceCard : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(AppTheme.radiusControl - 2),
+                                  border: !_isLoginMode ? Border.all(color: AppTheme.border) : null,
+                                ),
+                                child: Text(
+                                  'Create Account',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: !_isLoginMode ? FontWeight.w600 : FontWeight.w500,
+                                    color: !_isLoginMode ? AppTheme.textPrimary : AppTheme.textSecondary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 20),
 
@@ -138,7 +186,7 @@ class _AuthDialogState extends State<AuthDialog> {
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: AppTheme.error.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(AppTheme.radiusControl),
                           border: Border.all(color: AppTheme.error.withValues(alpha: 0.3)),
                         ),
                         child: Row(
@@ -186,7 +234,7 @@ class _AuthDialogState extends State<AuthDialog> {
                         prefixIcon: const Icon(Icons.lock_outline, size: 20),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                             size: 20,
                           ),
                           onPressed: () {
@@ -214,9 +262,9 @@ class _AuthDialogState extends State<AuthDialog> {
                                 color: Colors.white,
                               ),
                             )
-                          : Text(_isLoginMode ? 'Log In' : 'Create Account'),
+                          : Text(_isLoginMode ? 'Sign In' : 'Create Free Account'),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
 
                     Center(
                       child: TextButton(
@@ -230,8 +278,8 @@ class _AuthDialogState extends State<AuthDialog> {
                         child: Text(
                           _isLoginMode
                               ? "Don't have an account? Sign up"
-                              : 'Already have an account? Log in',
-                          style: const TextStyle(fontSize: 13, color: AppTheme.accent),
+                              : 'Already have an account? Sign in',
+                          style: const TextStyle(fontSize: 12, color: AppTheme.accent),
                         ),
                       ),
                     ),

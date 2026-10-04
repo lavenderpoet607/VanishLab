@@ -111,10 +111,10 @@ class _TaskResultPageState extends State<TaskResultPage> {
 
   Widget _buildSearchBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
         border: Border.all(color: AppTheme.border),
       ),
       child: Row(
@@ -124,9 +124,12 @@ class _TaskResultPageState extends State<TaskResultPage> {
           Expanded(
             child: TextField(
               controller: _searchController,
+              style: AppTheme.body,
               decoration: const InputDecoration(
-                hintText: 'Enter Task ID (UUID) to lookup...',
+                hintText: 'Cari berdasarkan Task ID (UUID)...',
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
                 filled: false,
                 contentPadding: EdgeInsets.zero,
               ),
@@ -135,7 +138,8 @@ class _TaskResultPageState extends State<TaskResultPage> {
           ),
           IconButton(
             icon: const Icon(Icons.content_paste, size: 18),
-            tooltip: 'Paste from clipboard',
+            tooltip: 'Tempel dari clipboard',
+            color: AppTheme.textSecondary,
             onPressed: () async {
               final data = await Clipboard.getData(Clipboard.kTextPlain);
               if (data?.text != null) {
@@ -148,9 +152,13 @@ class _TaskResultPageState extends State<TaskResultPage> {
           ElevatedButton(
             onPressed: _lookupTaskId,
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              backgroundColor: AppTheme.accent,
+              foregroundColor: AppTheme.onAccent,
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              minimumSize: const Size(60, 38),
+              elevation: 0,
             ),
-            child: const Text('Track'),
+            child: const Text('Lacak', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
           ),
         ],
       ),
@@ -159,23 +167,27 @@ class _TaskResultPageState extends State<TaskResultPage> {
 
   Widget _buildConnectingCard() {
     return Container(
-      padding: const EdgeInsets.all(40),
+      padding: const EdgeInsets.all(36),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
         border: Border.all(color: AppTheme.border),
       ),
       child: const Column(
         children: [
-          CircularProgressIndicator(color: AppTheme.accent),
+          SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(strokeWidth: 2.5, color: AppTheme.accent),
+          ),
           SizedBox(height: 20),
           Text(
-            'Connecting to Task Polling Service...',
+            'Menghubungkan ke Pemantau Tugas...',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
           ),
           SizedBox(height: 6),
           Text(
-            'Fetching job state from backend workers...',
+            'Memeriksa status antrean worker backend...',
             style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
           ),
         ],
@@ -187,10 +199,10 @@ class _TaskResultPageState extends State<TaskResultPage> {
     final percent = (task.progress / 100.0).clamp(0.0, 1.0);
 
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
         border: Border.all(color: AppTheme.border),
       ),
       child: Column(
@@ -385,40 +397,26 @@ class _TaskResultPageState extends State<TaskResultPage> {
           const SizedBox(height: 16),
         ] else if (outputFile != null && outputFile.fileType == 'video') ...[
           Container(
-            height: 260,
+            height: 240,
             decoration: BoxDecoration(
               color: AppTheme.surfaceCard,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppTheme.radiusCard),
               border: Border.all(color: AppTheme.border),
-              gradient: LinearGradient(
-                colors: [
-                  AppTheme.surfaceCard,
-                  AppTheme.primary.withValues(alpha: 0.12),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
             ),
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: AppTheme.accent.withValues(alpha: 0.15),
+                      color: AppTheme.surfaceRaised,
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.accent.withValues(alpha: 0.25),
-                          blurRadius: 20,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                      border: Border.all(color: AppTheme.border),
                     ),
                     child: const Icon(
-                      Icons.play_circle_fill_rounded,
-                      size: 56,
+                      Icons.play_arrow_rounded,
+                      size: 48,
                       color: AppTheme.accent,
                     ),
                   ),
@@ -588,32 +586,45 @@ class _TaskResultPageState extends State<TaskResultPage> {
 
   Widget _buildFailedCard(TaskTrackerState state) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: AppTheme.error.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.error.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+        border: Border.all(color: AppTheme.error.withValues(alpha: 0.25)),
       ),
       child: Column(
         children: [
-          const Icon(Icons.error_outline, size: 48, color: AppTheme.error),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppTheme.error.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.error_outline, size: 36, color: AppTheme.error),
+          ),
           const SizedBox(height: 16),
           const Text(
             'Task Processing Failed',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
           ),
           const SizedBox(height: 8),
           Text(
-            state.errorMessage ?? 'An error occurred during execution.',
+            state.errorMessage ?? 'An unexpected error occurred during execution.',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 13, color: AppTheme.error),
+            style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary, height: 1.4),
           ),
           const SizedBox(height: 24),
-          OutlinedButton(
+          OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppTheme.textSecondary,
+              side: const BorderSide(color: AppTheme.border),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusControl)),
+            ),
             onPressed: () {
               context.read<TaskTrackerBloc>().add(StopTrackingTaskEvent());
             },
-            child: const Text('Dismiss'),
+            icon: const Icon(Icons.close_rounded, size: 16),
+            label: const Text('Dismiss Error'),
           ),
         ],
       ),
@@ -622,25 +633,33 @@ class _TaskResultPageState extends State<TaskResultPage> {
 
   Widget _buildEmptyState() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
         border: Border.all(color: AppTheme.border),
       ),
-      child: const Column(
+      child: Column(
         children: [
-          Icon(Icons.hourglass_empty, size: 48, color: AppTheme.textMuted),
-          SizedBox(height: 16),
-          Text(
-            'No Active Tasks Being Tracked',
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceRaised,
+              borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+              border: Border.all(color: AppTheme.border),
+            ),
+            child: const Icon(Icons.radar_rounded, size: 36, color: AppTheme.textMuted),
           ),
-          SizedBox(height: 8),
-          Text(
-            'Submit an inpainting or download job to monitor its progress live here,\nor enter a Task ID above to track an existing job.',
+          const SizedBox(height: 18),
+          const Text(
+            'No Active Tasks in Queue',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Jobs submitted in Photo/Video Inpainting or Media Downloader will automatically appear here with real-time status and logs.\n\nYou can also enter a valid Task ID in the field above.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
+            style: TextStyle(fontSize: 13, color: AppTheme.textSecondary, height: 1.45),
           ),
         ],
       ),
@@ -649,15 +668,34 @@ class _TaskResultPageState extends State<TaskResultPage> {
 
   Widget _buildStatusPill(String text, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(AppTheme.radiusTag),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 5),
+          Text(
+            text.toUpperCase(),
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+              color: color,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -44,12 +44,12 @@ class _DrawingCanvasState extends State<DrawingCanvas> {
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.black26,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppTheme.radiusCard),
               border: Border.all(color: AppTheme.border),
             ),
             child: Center(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppTheme.radiusControl),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     _checkRenderedSize();
@@ -122,7 +122,7 @@ class _DrawingCanvasState extends State<DrawingCanvas> {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
                 color: AppTheme.surfaceCard,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                 border: Border.all(color: AppTheme.border),
                 boxShadow: [
                   BoxShadow(
@@ -140,7 +140,7 @@ class _DrawingCanvasState extends State<DrawingCanvas> {
                     padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceElevated,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusControl),
                       border: Border.all(color: AppTheme.border),
                     ),
                     child: Row(
@@ -315,13 +315,13 @@ class _DrawingCanvasState extends State<DrawingCanvas> {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => widget.controller.setTool(tool),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            color: isSelected ? AppTheme.accent : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppTheme.radiusControl),
           ),
           child: FittedBox(
             fit: BoxFit.scaleDown,

@@ -355,11 +355,11 @@ class _InpaintPageState extends State<InpaintPage> {
 
   Widget _buildModeSelector() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
         border: Border.all(color: AppTheme.border),
       ),
       child: Row(
@@ -374,13 +374,12 @@ class _InpaintPageState extends State<InpaintPage> {
               },
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 4),
           Expanded(
             child: _buildModeTabItem(
               title: 'Video',
               icon: Icons.videocam_outlined,
               isSelected: _mediaMode == InpaintMediaMode.video,
-              badge: 'AI CLEAN',
               onTap: () {
                 setState(() => _mediaMode = InpaintMediaMode.video);
               },
@@ -396,69 +395,38 @@ class _InpaintPageState extends State<InpaintPage> {
     required IconData icon,
     required bool isSelected,
     required VoidCallback onTap,
-    String? badge,
   }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppTheme.radiusControl - 2),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: AppTheme.primary.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : null,
+            color: isSelected ? AppTheme.surfaceRaised : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppTheme.radiusControl - 2),
+            border: isSelected ? Border.all(color: AppTheme.borderStrong) : null,
           ),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  icon,
-                  size: 18,
-                  color: isSelected ? Colors.white : AppTheme.textSecondary,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 18,
+                color: isSelected ? AppTheme.accent : AppTheme.textSecondary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected ? Colors.white : AppTheme.textSecondary,
-                  ),
-                ),
-                if (badge != null) ...[
-                  const SizedBox(width: 6),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: isSelected ? AppTheme.accent : AppTheme.accent.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      badge,
-                      style: TextStyle(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w800,
-                        color: isSelected ? Colors.black : AppTheme.accent,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -557,56 +525,81 @@ class _InpaintPageState extends State<InpaintPage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 540),
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
                 decoration: BoxDecoration(
                   color: AppTheme.surfaceCard,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: AppTheme.border, width: 1.5),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+                  border: Border.all(color: AppTheme.border),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
-                        color: AppTheme.accent.withValues(alpha: 0.1),
+                        color: AppTheme.surfaceRaised,
                         shape: BoxShape.circle,
+                        border: Border.all(color: AppTheme.border),
                       ),
                       child: const Icon(
                         Icons.add_photo_alternate_outlined,
-                        size: 40,
+                        size: 38,
                         color: AppTheme.accent,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     const Text(
-                      'Unggah Foto untuk AI Watermark Remover',
+                      'AI Photo Watermark Remover',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.4,
                         color: AppTheme.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Gunakan Brush, Box (kotak), atau Lasso untuk menandai watermark logo, teks, atau objek. Dilengkapi generative background fill yang merekonstruksi tekstur latar belakang secara clean & bebas cacat.',
+                      'Pilih foto dari galeri. Gunakan Brush, Bounding Box, atau Lasso untuk menandai teks, stiker, atau watermark logo yang ingin dihilangkan secara mulus.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 13, color: AppTheme.textSecondary, height: 1.4),
+                      style: TextStyle(fontSize: 13, color: AppTheme.textSecondary, height: 1.45),
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton.icon(
-                      onPressed: _pickImage,
-                      icon: const Icon(Icons.folder_open),
-                      label: const Text('Pilih Foto / Gambar'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                    const SizedBox(height: 18),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _buildFeaturePill(Icons.image_outlined, 'PNG, JPG, WebP'),
+                        _buildFeaturePill(Icons.brush_outlined, 'Brush / Box / Lasso'),
+                        _buildFeaturePill(Icons.auto_awesome_outlined, 'Neural Inpainting'),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton.icon(
+                        onPressed: _pickImage,
+                        icon: const Icon(Icons.folder_open_rounded, size: 18),
+                        label: const Text(
+                          'Pilih Foto / Gambar',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.accent,
+                          foregroundColor: AppTheme.onAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+                          ),
+                          elevation: 0,
+                        ),
                       ),
                     ),
                   ],
@@ -616,6 +609,32 @@ class _InpaintPageState extends State<InpaintPage> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildFeaturePill(IconData icon, String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceRaised,
+        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+        border: Border.all(color: AppTheme.border),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: AppTheme.accent),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: AppTheme.textSecondary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1520,56 +1539,81 @@ class _InpaintPageState extends State<InpaintPage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 540),
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
                 decoration: BoxDecoration(
                   color: AppTheme.surfaceCard,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: AppTheme.border, width: 1.5),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+                  border: Border.all(color: AppTheme.border),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
-                        color: AppTheme.accent.withValues(alpha: 0.1),
+                        color: AppTheme.surfaceRaised,
                         shape: BoxShape.circle,
+                        border: Border.all(color: AppTheme.border),
                       ),
                       child: const Icon(
                         Icons.video_library_outlined,
-                        size: 40,
+                        size: 38,
                         color: AppTheme.accent,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     const Text(
-                      'Unggah Video untuk Hapus Watermark',
+                      'AI Video Watermark Remover',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.4,
                         color: AppTheme.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Bisa gunakan Corner Preset, Custom Box, atau Brush langsung pada video. Menghilangkan logo TikTok, Reels, atau teks berjalan tanpa merusak resolusi dan kualitas suara.',
+                      'Pilih file video Anda. Gunakan Corner Preset otomatis untuk TikTok & Reels, Custom Box interaktif, atau Brush langsung pada frame preview video.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 13, color: AppTheme.textSecondary, height: 1.4),
+                      style: TextStyle(fontSize: 13, color: AppTheme.textSecondary, height: 1.45),
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton.icon(
-                      onPressed: _pickVideo,
-                      icon: const Icon(Icons.video_file_outlined),
-                      label: const Text('Pilih File Video'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                    const SizedBox(height: 18),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _buildFeaturePill(Icons.movie_outlined, 'MP4, MOV, MKV'),
+                        _buildFeaturePill(Icons.speed_outlined, '60 FPS Native'),
+                        _buildFeaturePill(Icons.audiotrack_outlined, 'Audio Utuh 100%'),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton.icon(
+                        onPressed: _pickVideo,
+                        icon: const Icon(Icons.video_file_rounded, size: 18),
+                        label: const Text(
+                          'Pilih File Video',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.accent,
+                          foregroundColor: AppTheme.onAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+                          ),
+                          elevation: 0,
+                        ),
                       ),
                     ),
                   ],

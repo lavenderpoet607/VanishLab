@@ -30,7 +30,7 @@ class _BeforeAfterComparisonState extends State<BeforeAfterComparison> {
         final height = constraints.maxHeight;
 
         return ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppTheme.radiusCard),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -39,7 +39,7 @@ class _BeforeAfterComparisonState extends State<BeforeAfterComparison> {
                 fit: BoxFit.contain,
                 loadingBuilder: (context, child, progress) {
                   if (progress == null) return child;
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(strokeWidth: 2));
                 },
                 errorBuilder: (context, error, stackTrace) => const Center(
                   child: Column(
@@ -60,7 +60,7 @@ class _BeforeAfterComparisonState extends State<BeforeAfterComparison> {
                   fit: BoxFit.contain,
                   loadingBuilder: (context, child, progress) {
                     if (progress == null) return child;
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(strokeWidth: 2));
                   },
                   errorBuilder: (context, error, stackTrace) => const Center(
                     child: Column(
@@ -76,18 +76,18 @@ class _BeforeAfterComparisonState extends State<BeforeAfterComparison> {
               ),
 
               Positioned(
-                left: (width * _splitRatio) - 1.5,
+                left: (width * _splitRatio) - 1,
                 top: 0,
                 bottom: 0,
                 child: Container(
-                  width: 3,
-                  color: Colors.white,
+                  width: 2,
+                  color: Colors.white.withValues(alpha: 0.85),
                 ),
               ),
 
               Positioned(
-                left: (width * _splitRatio) - 20,
-                top: (height / 2) - 20,
+                left: (width * _splitRatio) - 18,
+                top: (height / 2) - 18,
                 child: GestureDetector(
                   onHorizontalDragUpdate: (details) {
                     setState(() {
@@ -95,24 +95,24 @@ class _BeforeAfterComparisonState extends State<BeforeAfterComparison> {
                     });
                   },
                   child: Container(
-                    width: 40,
-                    height: 40,
+                    width: 36,
+                    height: 36,
                     decoration: BoxDecoration(
                       color: AppTheme.accent,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.4),
-                          blurRadius: 8,
-                          spreadRadius: 2,
+                          color: Colors.black.withValues(alpha: 0.5),
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.chevron_left, size: 18, color: Colors.black),
-                        Icon(Icons.chevron_right, size: 18, color: Colors.black),
+                        Icon(Icons.chevron_left_rounded, size: 16, color: Colors.white),
+                        Icon(Icons.chevron_right_rounded, size: 16, color: Colors.white),
                       ],
                     ),
                   ),
@@ -120,14 +120,14 @@ class _BeforeAfterComparisonState extends State<BeforeAfterComparison> {
               ),
 
               Positioned(
-                left: 16,
-                top: 16,
-                child: _buildBadge('ORIGINAL', Colors.black54),
+                left: 14,
+                top: 14,
+                child: _buildBadge('ORIGINAL', const Color(0xCC090A0E)),
               ),
               Positioned(
-                right: 16,
-                top: 16,
-                child: _buildBadge('CLEANED', AppTheme.primary.withValues(alpha: 0.8)),
+                right: 14,
+                top: 14,
+                child: _buildBadge('CLEANED', AppTheme.accent.withValues(alpha: 0.9)),
               ),
             ],
           ),
@@ -138,19 +138,19 @@ class _BeforeAfterComparisonState extends State<BeforeAfterComparison> {
 
   Widget _buildBadge(String text, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white24),
+        borderRadius: BorderRadius.circular(AppTheme.radiusTag),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
       ),
       child: Text(
         text,
         style: const TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
           color: Colors.white,
-          letterSpacing: 1,
+          letterSpacing: 0.8,
         ),
       ),
     );

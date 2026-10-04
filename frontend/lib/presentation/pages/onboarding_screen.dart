@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/di/injection.dart';
 import '../../core/storage/storage_service.dart';
 import '../../core/theme/app_theme.dart';
+import '../widgets/app_logo_3d.dart';
 import 'main_navigation_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -9,6 +10,29 @@ class OnboardingScreen extends StatefulWidget {
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingFeatureBadge {
+  final IconData icon;
+  final String label;
+
+  const _OnboardingFeatureBadge(this.icon, this.label);
+}
+
+class _OnboardingItem {
+  final String tag;
+  final String title;
+  final String description;
+  final String imagePath;
+  final List<_OnboardingFeatureBadge> badges;
+
+  const _OnboardingItem({
+    required this.tag,
+    required this.title,
+    required this.description,
+    required this.imagePath,
+    required this.badges,
+  });
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
@@ -22,7 +46,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       description:
           'Hilangkan logo, teks berjalan, atau objek yang mengganggu pada foto & video dengan AI generative inpainting yang menyatu mulus ke latar belakang.',
       imagePath: 'assets/images/onboarding_inpaint.jpg',
-      badges: ['🎨 Brush & Custom Box', '⚡ Generative Fill', '✨ Bebas Cacat Blur'],
+      badges: [
+        _OnboardingFeatureBadge(Icons.brush_outlined, 'Brush & Custom Box'),
+        _OnboardingFeatureBadge(Icons.auto_awesome_outlined, 'Generative Fill'),
+        _OnboardingFeatureBadge(Icons.blur_off_outlined, 'Zero Blur Distortion'),
+      ],
     ),
     _OnboardingItem(
       tag: 'CLEAN MEDIA DOWNLOADER',
@@ -30,7 +58,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       description:
           'Ekstraksi instan dari TikTok, Instagram Reels, YouTube Shorts, dan Twitter/X. Simpan video HD jernih atau konversi langsung ke audio MP3 320kbps.',
       imagePath: 'assets/images/onboarding_download.jpg',
-      badges: ['📱 Multi-Platform', '🎵 Ekstrak Audio MP3', '✂️ Auto-Crop Bars'],
+      badges: [
+        _OnboardingFeatureBadge(Icons.devices_outlined, 'Multi-Platform'),
+        _OnboardingFeatureBadge(Icons.audiotrack_outlined, 'Ekstrak Audio MP3'),
+        _OnboardingFeatureBadge(Icons.crop_outlined, 'Auto-Crop Bars'),
+      ],
     ),
     _OnboardingItem(
       tag: 'HIGH-PERFORMANCE ENGINE',
@@ -38,7 +70,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       description:
           'Pemrosesan video terdistribusi menjaga frame rate 60 FPS dan kualitas audio asli 100% tanpa kompresi pecah. Nikmati 50 kuota gratis setiap hari.',
       imagePath: 'assets/images/logo_3d.jpg',
-      badges: ['🚀 60 FPS Lossless', '🔒 24 Jam Auto-Purge', '🎁 50 Kuota Gratis/Hari'],
+      badges: [
+        _OnboardingFeatureBadge(Icons.speed_outlined, '60 FPS Lossless'),
+        _OnboardingFeatureBadge(Icons.lock_clock_outlined, '24 Jam Auto-Purge'),
+        _OnboardingFeatureBadge(Icons.card_giftcard_outlined, '50 Kuota Gratis/Hari'),
+      ],
     ),
   ];
 
@@ -85,26 +121,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Stack(
           children: [
             Positioned(
-              top: -60,
-              right: -60,
-              child: Container(
-                width: 220,
-                height: 220,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppTheme.accent.withValues(alpha: 0.12),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 100,
-              left: -80,
+              top: -80,
+              right: -80,
               child: Container(
                 width: 240,
                 height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF00E5FF).withValues(alpha: 0.08),
+                  gradient: RadialGradient(
+                    colors: [
+                      AppTheme.accent.withValues(alpha: 0.12),
+                      Colors.transparent,
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -117,21 +146,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     children: [
                       Row(
                         children: [
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppTheme.accent,
-                            ),
-                          ),
+                          const AppLogo3D(size: AppLogoSize.small, showGlow: false),
                           const SizedBox(width: 8),
                           Text(
                             'VanishLab',
                             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w700,
                                   color: AppTheme.textPrimary,
-                                  letterSpacing: 0.5,
+                                  letterSpacing: 0.3,
                                 ),
                           ),
                         ],
@@ -180,17 +202,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
-                        height: 52,
+                        height: 50,
                         child: ElevatedButton(
                           onPressed: _onNext,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.accent,
-                            foregroundColor: Colors.white,
+                            foregroundColor: AppTheme.onAccent,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(AppTheme.radiusControl),
                             ),
-                            elevation: 4,
-                            shadowColor: AppTheme.accent.withValues(alpha: 0.4),
+                            elevation: 0,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -198,9 +219,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               Text(
                                 isLastPage ? 'Mulai Sekarang' : 'Lanjut',
                                 style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.3,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.2,
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -208,7 +229,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 isLastPage
                                     ? Icons.arrow_forward_rounded
                                     : Icons.arrow_forward_ios_rounded,
-                                size: isLastPage ? 20 : 16,
+                                size: isLastPage ? 18 : 14,
                               ),
                             ],
                           ),
@@ -229,11 +250,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 260),
       margin: const EdgeInsets.only(right: 8),
-      height: 6,
-      width: isActive ? 24 : 6,
+      height: 4,
+      width: isActive ? 24 : 8,
       decoration: BoxDecoration(
-        color: isActive ? AppTheme.accent : AppTheme.border,
-        borderRadius: BorderRadius.circular(3),
+        color: isActive ? AppTheme.accent : AppTheme.borderStrong,
+        borderRadius: BorderRadius.circular(2),
       ),
     );
   }
@@ -242,7 +263,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableHeight = constraints.maxHeight;
-        final imageSize = (availableHeight * 0.42).clamp(160.0, 280.0);
+        final imageSize = (availableHeight * 0.40).clamp(160.0, 260.0);
 
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -254,22 +275,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: imageSize,
                 height: imageSize,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.accent.withValues(alpha: 0.22),
-                      blurRadius: 36,
-                      offset: const Offset(0, 10),
+                      color: Colors.black.withValues(alpha: 0.45),
+                      blurRadius: 28,
+                      offset: const Offset(0, 8),
                     ),
                     BoxShadow(
-                      color: const Color(0xFF00E5FF).withValues(alpha: 0.12),
-                      blurRadius: 28,
-                      offset: const Offset(-4, -4),
+                      color: AppTheme.accent.withValues(alpha: 0.15),
+                      blurRadius: 24,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
@@ -281,7 +302,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             color: AppTheme.surfaceCard,
                             child: const Icon(
                               Icons.auto_fix_high,
-                              size: 64,
+                              size: 56,
                               color: AppTheme.accent,
                             ),
                           );
@@ -289,10 +310,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(28),
+                          borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.18),
-                            width: 1.5,
+                            color: Colors.white.withValues(alpha: 0.15),
+                            width: 1.0,
                           ),
                         ),
                       ),
@@ -300,23 +321,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: availableHeight * 0.04),
+              SizedBox(height: availableHeight * 0.035),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppTheme.accent.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(20),
+                  color: AppTheme.surfaceCard,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusTag),
                   border: Border.all(
-                    color: AppTheme.accent.withValues(alpha: 0.3),
-                    width: 1,
+                    color: AppTheme.border,
                   ),
                 ),
                 child: Text(
                   item.tag,
                   style: const TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
                     color: AppTheme.accent,
                   ),
                 ),
@@ -327,7 +347,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.4,
                   color: AppTheme.textPrimary,
                   height: 1.25,
                 ),
@@ -349,19 +370,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 runSpacing: 8,
                 children: item.badges.map((badge) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceCard,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusControl),
                       border: Border.all(color: AppTheme.border),
                     ),
-                    child: Text(
-                      badge,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: AppTheme.textMuted,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(badge.icon, size: 14, color: AppTheme.accent),
+                        const SizedBox(width: 6),
+                        Text(
+                          badge.label,
+                          style: const TextStyle(
+                            fontSize: 11.5,
+                            color: AppTheme.textPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }).toList(),
@@ -373,20 +401,4 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       },
     );
   }
-}
-
-class _OnboardingItem {
-  final String tag;
-  final String title;
-  final String description;
-  final String imagePath;
-  final List<String> badges;
-
-  const _OnboardingItem({
-    required this.tag,
-    required this.title,
-    required this.description,
-    required this.imagePath,
-    required this.badges,
-  });
 }

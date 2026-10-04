@@ -112,15 +112,59 @@ class _DownloaderPageState extends State<DownloaderPage> {
         final isLoading = dlState.status == DownloaderStatus.submitting;
 
         return SlateCard(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(7),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceRaised,
+                        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+                        border: Border.all(color: AppTheme.border),
+                      ),
+                      child: const Icon(Icons.download_for_offline, size: 18, color: AppTheme.accent),
+                    ),
+                    const SizedBox(width: 10),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Universal Media Downloader',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.textPrimary,
+                            ),
+                          ),
+                          Text(
+                            'Ekstraksi video & audio jernih tanpa watermark platform',
+                            style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
 
-                const SectionLabel('URL Extraction Hub'),
-                const SizedBox(height: 12),
+                // Supported platforms strip
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    _buildPlatformChip('TikTok'),
+                    _buildPlatformChip('Instagram Reels'),
+                    _buildPlatformChip('YouTube Shorts'),
+                    _buildPlatformChip('X / Twitter'),
+                  ],
+                ),
+                const SizedBox(height: 14),
 
                 TextFormField(
                   controller: _urlController,
@@ -128,7 +172,7 @@ class _DownloaderPageState extends State<DownloaderPage> {
                   keyboardType: TextInputType.url,
                   style: AppTheme.body,
                   decoration: InputDecoration(
-                    hintText: 'Paste media link (TikTok, IG, YT)...',
+                    hintText: 'Tempel link video (TikTok, IG, YT, X)...',
                     prefixIcon: const Icon(Icons.link, size: 20, color: AppTheme.textMuted),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 6),
@@ -153,11 +197,11 @@ class _DownloaderPageState extends State<DownloaderPage> {
                   ),
                   validator: (val) {
                     if (val == null || val.trim().isEmpty) {
-                      return 'Please paste or enter a media URL';
+                      return 'Silakan masukkan tautan media';
                     }
                     final trimmed = val.trim();
                     if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) {
-                      return 'URL must start with http:// or https://';
+                      return 'URL harus diawali http:// atau https://';
                     }
                     return null;
                   },
@@ -166,8 +210,8 @@ class _DownloaderPageState extends State<DownloaderPage> {
 
                 SegmentedSelector<bool>(
                   segments: const [
-                    (false, 'Video (MP4)'),
-                    (true, 'Audio (MP3)'),
+                    (false, 'Video Bersih (MP4)'),
+                    (true, 'Audio Saja (MP3 320k)'),
                   ],
                   selected: _extractAudioOnly,
                   onChanged: isLoading ? null : (val) => setState(() => _extractAudioOnly = val),
@@ -176,7 +220,7 @@ class _DownloaderPageState extends State<DownloaderPage> {
 
                 Container(
                   height: 48,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
                     color: AppTheme.surfaceInset,
                     borderRadius: BorderRadius.circular(AppTheme.radiusControl),
@@ -184,12 +228,14 @@ class _DownloaderPageState extends State<DownloaderPage> {
                   ),
                   child: Row(
                     children: [
+                      const Icon(Icons.crop, size: 16, color: AppTheme.textMuted),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Crop black bars / watermark strips',
+                          'Crop strip hitam & watermark bar tepi',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTheme.body.copyWith(fontSize: 13),
+                          style: AppTheme.body.copyWith(fontSize: 12.5),
                         ),
                       ),
                       Switch(
@@ -225,7 +271,7 @@ class _DownloaderPageState extends State<DownloaderPage> {
                             ),
                           )
                         : const Text(
-                            'Download Clean Media',
+                            'Unduh Media Bersih',
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
@@ -239,6 +285,26 @@ class _DownloaderPageState extends State<DownloaderPage> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildPlatformChip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceInset,
+        borderRadius: BorderRadius.circular(AppTheme.radiusTag),
+        border: Border.all(color: AppTheme.border),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 10.5,
+          fontWeight: FontWeight.w600,
+          color: AppTheme.textMuted,
+          letterSpacing: 0.2,
+        ),
+      ),
     );
   }
 

@@ -84,15 +84,15 @@ class _AppLogo3DState extends State<AppLogo3D> with SingleTickerProviderStateMix
         boxShadow: widget.showGlow
             ? [
                 BoxShadow(
-                  color: AppTheme.accent.withValues(alpha: 0.28),
+                  color: Colors.black.withValues(alpha: 0.5),
                   blurRadius: dim * 0.35,
-                  spreadRadius: 1,
                   offset: const Offset(0, 4),
                 ),
                 BoxShadow(
-                  color: const Color(0xFF00E5FF).withValues(alpha: 0.16),
+                  color: AppTheme.accent.withValues(alpha: 0.22),
                   blurRadius: dim * 0.25,
-                  offset: const Offset(-2, -2),
+                  spreadRadius: 1,
+                  offset: const Offset(0, 2),
                 ),
               ]
             : null,
@@ -111,8 +111,8 @@ class _AppLogo3DState extends State<AppLogo3D> with SingleTickerProviderStateMix
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(radius),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  width: 1.2,
+                  color: Colors.white.withValues(alpha: 0.15),
+                  width: 1.0,
                 ),
               ),
             ),
@@ -163,21 +163,21 @@ class _AppLogo3DState extends State<AppLogo3D> with SingleTickerProviderStateMix
   Widget _buildFallbackVector(double dim, double radius) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF14161C),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(radius),
         gradient: const RadialGradient(
           center: Alignment(-0.2, -0.3),
           radius: 1.1,
           colors: [
-            Color(0xFF242938),
-            Color(0xFF0E1015),
+            Color(0xFF222836),
+            Color(0xFF0F1218),
           ],
         ),
       ),
       child: Center(
         child: ShaderMask(
           shaderCallback: (bounds) => const LinearGradient(
-            colors: [Color(0xFFFF7A00), Color(0xFFFF3D00), Color(0xFF00E5FF)],
+            colors: [Color(0xFFFFFFFF), Color(0xFFFF884D), AppTheme.accent],
             stops: [0.0, 0.5, 1.0],
           ).createShader(bounds),
           child: Icon(

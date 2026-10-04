@@ -2,37 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
+  // Ultra-crisp studio dark palette (obsidian neutral base + deliberate electric tangerine accent)
+  static const Color background = Color(0xFF090A0E);
+  static const Color surfaceCard = Color(0xFF13161D);
+  static const Color surfaceInset = Color(0xFF0B0D12);
+  static const Color surfaceRaised = Color(0xFF1B1E28);
+  static const Color surfaceElevated = Color(0xFF232836);
+  static const Color border = Color(0xFF1F2430);
+  static const Color borderStrong = Color(0xFF323A4D);
 
-  static const Color background = Color(0xFF0D0E11);
-  static const Color surfaceCard = Color(0xFF16181D);
-  static const Color surfaceInset = Color(0xFF0F1115);
-  static const Color surfaceRaised = Color(0xFF1F2229);
-  static const Color border = Color(0xFF242831);
-  static const Color borderStrong = Color(0xFF323743);
+  static const Color textPrimary = Color(0xFFF8FAFC);
+  static const Color textSecondary = Color(0xFF94A3B8);
+  static const Color textMuted = Color(0xFF64748B);
 
-  static const Color textPrimary = Color(0xFFEDEEF0);
-  static const Color textSecondary = Color(0xFF9BA1AC);
-  static const Color textMuted = Color(0xFF7D8490);
+  static const Color solidLight = Color(0xFFF1F5F9);
+  static const Color onSolidLight = Color(0xFF090A0E);
 
-  static const Color solidLight = Color(0xFFF2F3F5);
-  static const Color onSolidLight = Color(0xFF0D0E11);
-
-  static const Color accent = Color(0xFFFF5C00);
+  static const Color accent = Color(0xFFFF5500);
   static const Color onAccent = Color(0xFF000000);
 
   static const Color success = Color(0xFF10B981);
   static const Color warning = Color(0xFFF59E0B);
   static const Color error = Color(0xFFEF4444);
 
+  // Disciplined, consistent radii (avoiding arbitrary pill shapes everywhere)
   static const double radiusTag = 4;
   static const double radiusControl = 8;
-  static const double radiusCard = 12;
+  static const double radiusCard = 14;
 
   static const Color primary = accent;
-  static const Color primaryLight = accent;
+  static const Color primaryLight = Color(0xFFFF7733);
   static const Color surface = surfaceCard;
-  static const Color surfaceElevated = surfaceRaised;
 
+  // Typography tokens with Google Fonts Inter & JetBrains Mono
   static TextStyle get label => GoogleFonts.inter(
         fontSize: 11,
         fontWeight: FontWeight.w600,
@@ -44,15 +46,15 @@ class AppTheme {
   static TextStyle get body => GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        height: 1.4,
+        height: 1.45,
         color: textPrimary,
       );
 
   static TextStyle get headline => GoogleFonts.inter(
         fontSize: 18,
         fontWeight: FontWeight.w700,
-        height: 1.2,
-        letterSpacing: -0.2,
+        height: 1.25,
+        letterSpacing: -0.3,
         color: textPrimary,
       );
 
@@ -64,6 +66,7 @@ class AppTheme {
       );
 
   static const List<FontFeature> tabular = [FontFeature.tabularFigures()];
+
   static ThemeData get darkTheme {
     final base = ThemeData.dark(useMaterial3: true);
 
@@ -97,11 +100,16 @@ class AppTheme {
         outline: border,
       ),
       textTheme: const TextTheme().copyWith(
-        displayLarge: GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.w700, color: textPrimary),
-        titleLarge: headline,
+        displayLarge: GoogleFonts.inter(
+          fontSize: 32,
+          fontWeight: FontWeight.w800,
+          letterSpacing: -0.8,
+          color: textPrimary,
+        ),
+        titleLarge: headline.copyWith(fontSize: 20),
         titleMedium: headline.copyWith(fontSize: 16),
         bodyLarge: body,
-        bodyMedium: body.copyWith(color: textSecondary),
+        bodyMedium: body.copyWith(fontSize: 13, color: textSecondary),
         bodySmall: GoogleFonts.inter(fontSize: 12, color: textMuted),
         labelLarge: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: textPrimary),
         labelMedium: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: textSecondary),
@@ -140,7 +148,7 @@ class AppTheme {
           minimumSize: const Size(44, 48),
           padding: const EdgeInsets.symmetric(horizontal: 18),
           shape: controlShape,
-          textStyle: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600),
+          textStyle: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, letterSpacing: 0.1),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(

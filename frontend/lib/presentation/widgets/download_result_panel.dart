@@ -81,15 +81,33 @@ class OutputEmptyHint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SlateCard(
-      outlinedOnly: true,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SectionLabel('Output'),
-          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceRaised,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppTheme.border),
+            ),
+            child: const Icon(Icons.download_done_rounded, size: 24, color: AppTheme.textMuted),
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'Siap Mengekstrak Media',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 4),
           Text(
-            'Your clean file shows up here when processing finishes.',
-            style: AppTheme.body.copyWith(fontSize: 13, color: AppTheme.textSecondary),
+            'Tempel tautan video media sosial di atas lalu tekan "Unduh Media Bersih" untuk memulai ekstraksi.',
+            textAlign: TextAlign.center,
+            style: AppTheme.body.copyWith(fontSize: 12.5, color: AppTheme.textSecondary),
           ),
         ],
       ),

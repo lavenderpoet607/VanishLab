@@ -39,6 +39,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
           backgroundColor: AppTheme.surfaceCard,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+            side: const BorderSide(color: AppTheme.border),
+          ),
           title: const Text('Backend API Server Config'),
           content: SingleChildScrollView(
             child: Column(
@@ -63,18 +67,33 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   runSpacing: 6,
                   children: [
                     ActionChip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+                        side: const BorderSide(color: AppTheme.border),
+                      ),
+                      backgroundColor: AppTheme.surfaceRaised,
                       label: const Text('localhost:8000', style: TextStyle(fontSize: 11)),
                       onPressed: () => setDialogState(() {
                         controller.text = 'http://localhost:8000/api/v1';
                       }),
                     ),
                     ActionChip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+                        side: const BorderSide(color: AppTheme.border),
+                      ),
+                      backgroundColor: AppTheme.surfaceRaised,
                       label: const Text('127.0.0.1:8000', style: TextStyle(fontSize: 11)),
                       onPressed: () => setDialogState(() {
                         controller.text = 'http://127.0.0.1:8000/api/v1';
                       }),
                     ),
                     ActionChip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+                        side: const BorderSide(color: AppTheme.border),
+                      ),
+                      backgroundColor: AppTheme.surfaceRaised,
                       label: const Text('Android (10.0.2.2)', style: TextStyle(fontSize: 11)),
                       onPressed: () => setDialogState(() {
                         controller.text = 'http://10.0.2.2:8000/api/v1';
@@ -124,6 +143,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         context: context,
         builder: (ctx) => AlertDialog(
           backgroundColor: AppTheme.surfaceCard,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+            side: const BorderSide(color: AppTheme.border),
+          ),
           title: const Text('Account & Quota'),
           content: Column(
             mainAxisSize: MainAxisSize.min,

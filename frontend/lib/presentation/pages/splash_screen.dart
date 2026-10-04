@@ -142,20 +142,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         fit: StackFit.expand,
         children: [
           Positioned(
-            top: size.height * 0.18,
-            left: size.width * 0.5 - 140,
+            top: size.height * 0.16,
+            left: size.width * 0.5 - 160,
             child: Container(
-              width: 280,
-              height: 280,
+              width: 320,
+              height: 320,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppTheme.accent.withValues(alpha: 0.16),
-                    const Color(0xFF00E5FF).withValues(alpha: 0.06),
+                    AppTheme.accent.withValues(alpha: 0.15),
+                    AppTheme.accent.withValues(alpha: 0.03),
                     Colors.transparent,
                   ],
-                  stops: const [0.0, 0.45, 1.0],
+                  stops: const [0.0, 0.5, 1.0],
                 ),
               ),
             ),
@@ -207,17 +207,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               shaderCallback: (bounds) => const LinearGradient(
                                 colors: [
                                   Color(0xFFFFFFFF),
-                                  Color(0xFFFFB088),
-                                  Color(0xFF00E5FF),
+                                  Color(0xFFFFF2EB),
+                                  Color(0xFFFF7A33),
                                 ],
-                                stops: [0.0, 0.65, 1.0],
+                                stops: [0.0, 0.7, 1.0],
                               ).createShader(bounds),
                               child: const Text(
                                 'VanishLab',
                                 style: TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.w800,
-                                  letterSpacing: 1.2,
+                                  letterSpacing: -0.5,
                                   color: Colors.white,
                                 ),
                               ),
@@ -228,7 +228,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               style: TextStyle(
                                 fontSize: 13,
                                 color: AppTheme.textSecondary,
-                                letterSpacing: 0.6,
+                                letterSpacing: 0.3,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -237,7 +237,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
                                 color: AppTheme.surfaceCard,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(AppTheme.radiusTag),
                                 border: Border.all(color: AppTheme.border),
                               ),
                               child: const Text(
@@ -266,12 +266,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         builder: (context, _) {
                           final value = _progressAnimation.value;
                           return ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(AppTheme.radiusTag),
                             child: SizedBox(
                               height: 4,
                               child: LinearProgressIndicator(
                                 value: value,
-                                backgroundColor: AppTheme.surfaceCard,
+                                backgroundColor: AppTheme.surfaceRaised,
                                 valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.accent),
                               ),
                             ),

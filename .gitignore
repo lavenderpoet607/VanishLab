@@ -1,56 +1,175 @@
+# ==============================================================================
+# Python & Virtual Environments
+# ==============================================================================
 .venv/
 venv/
 env/
+ENV/
+env.bak/
+venv.bak/
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 .pytest_cache/
 .coverage
 htmlcov/
+.mypy_cache/
+.ruff_cache/
 
+# ==============================================================================
+# Environment Variables & Sensitive Credentials
+# ==============================================================================
 .env
+.env.*
+*.env
 *.env.local
 *.env.*.local
+!*.env.example
 cookies.txt
-linkedin_post.txt
-linkedin_banner.jpg
+**/cookies.txt
+*.pem
+*.key
+*.cert
+*.p12
 
+# ==============================================================================
+# Database, Runtime Storage & Media Files
+# ==============================================================================
 *.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
 backend/vanishlab.db
 backend/data/
-.agent/
-.agents/
+data/storage/
+data/temp/
+
+# ==============================================================================
+# AI Model Weights
+# ==============================================================================
+backend/models_weights/*
+!backend/models_weights/.gitkeep
+
+# ==============================================================================
+# Flutter & Dart (Root & Subdirectories)
+# ==============================================================================
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+coverage/
+build/
+*.lock
+!frontend/pubspec.lock
+
+# Android Platform
+**/android/.gradle/
+**/android/local.properties
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+**/android/captures/
+**/android/.cxx/
+**/android/*.apk
+**/android/*.aab
+*.jks
+*.keystore
+
+# iOS Platform
+**/ios/.generated/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS / Windows / Linux Ephemerals
+**/macos/Flutter/ephemeral/
+**/windows/flutter/ephemeral/
+**/linux/flutter/ephemeral/
+
+# ==============================================================================
+# IDEs & Text Editors
+# ==============================================================================
 .vscode/
-backend/models_weights/*.onnx
-backend/models_weights/*.pth
-backend/models_weights/*.bin
-backend/models_weights/*.pt
-
-frontend/.dart_tool/
-frontend/.flutter-plugins
-frontend/.flutter-plugins-dependencies
-frontend/.pub-cache/
-frontend/.pub/
-frontend/build/
-frontend/coverage/
-
-frontend/android/.gradle/
-frontend/android/local.properties
-frontend/android/app/debug/
-frontend/android/app/profile/
-frontend/android/app/release/
-
-frontend/ios/.generated/
-frontend/ios/Flutter/App.framework
-frontend/ios/Flutter/Flutter.framework
-frontend/ios/Flutter/Flutter.podspec
-frontend/ios/Pods/
-frontend/ios/.symlinks/
-
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .idea/
 *.iml
 *.ipr
 *.iws
+
+# ==============================================================================
+# AI Assistants, Agent Directories & IDE Plugin Artifacts
+# ==============================================================================
+.agent/
+.agents/
+.claude/
+.codebuddy/
+.codex/
+.continue/
+.cursor/
+.gemini/
+.kiro/
+.opencode/
+.qoder/
+.roo/
+.trae/
+.windsurf/
+**/.agent/
+**/.agents/
+**/.claude/
+**/.codebuddy/
+**/.codex/
+**/.continue/
+**/.cursor/
+**/.gemini/
+**/.kiro/
+**/.opencode/
+**/.qoder/
+**/.roo/
+**/.trae/
+**/.windsurf/
+frontend/.github/
+
+# ==============================================================================
+# OS Files, Logs & Scratch Artifacts
+# ==============================================================================
 .DS_Store
-*.log
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
+*.log
+*.tmp
+linkedin_post.txt
+linkedin_banner.jpg

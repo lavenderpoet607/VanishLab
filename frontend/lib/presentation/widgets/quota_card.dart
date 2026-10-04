@@ -26,16 +26,8 @@ class QuotaCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppTheme.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
         border: Border.all(color: AppTheme.border),
-        gradient: LinearGradient(
-          colors: [
-            AppTheme.surfaceCard,
-            AppTheme.primary.withValues(alpha: 0.08),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,8 +41,9 @@ class QuotaCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppTheme.primary.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(10),
+                        color: AppTheme.surfaceRaised,
+                        borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+                        border: Border.all(color: AppTheme.border),
                       ),
                       child: const Icon(Icons.bolt, color: AppTheme.accent, size: 20),
                     ),
