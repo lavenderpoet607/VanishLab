@@ -1,0 +1,3 @@
+# Ignore backend from Vercel Serverless bundling
+backend/
+.venv/
