@@ -63,6 +63,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import urllib.parse
+
 class VercelPathFixMiddleware:
     """Restores original request path rewritten by Vercel serverless proxy."""
 
@@ -71,21 +73,43 @@ class VercelPathFixMiddleware:
 
     async def __call__(self, scope, receive, send):
         if scope.get("type") == "http":
-            headers = dict(scope.get("headers", []))
-            matched_path = (
-                headers.get(b"x-matched-path")
-                or headers.get(b"x-invoke-path")
-                or headers.get(b"x-forwarded-uri")
-                or headers.get(b"x-real-path")
-            )
-            if matched_path:
-                decoded_path = matched_path.decode("utf-8", errors="ignore").split("?")[0]
-                if decoded_path and decoded_path != "/api/index.py":
-                    scope["path"] = decoded_path
-                    scope["raw_path"] = decoded_path.encode("utf-8")
-            elif scope.get("path") == "/api/index.py":
+            restored = False
+            # 1. Primary: Extract _path injected by vercel.json rewrite
+            query_bytes = scope.get("query_string", b"")
+            query_str = query_bytes.decode("utf-8", errors="ignore")
+            if "_path=" in query_str:
+                parsed_params = urllib.parse.parse_qs(query_str, keep_blank_values=True)
+                if "_path" in parsed_params:
+                    original_path = parsed_params.pop("_path")[0]
+                    unquoted = urllib.parse.unquote(original_path)
+                    if unquoted and unquoted != "/api/index.py":
+                        scope["path"] = unquoted
+                        scope["raw_path"] = unquoted.encode("utf-8")
+                        restored = True
+                    clean_query = urllib.parse.urlencode(parsed_params, doseq=True)
+                    scope["query_string"] = clean_query.encode("utf-8")
+
+            # 2. Secondary: Check proxy headers if not restored by query string
+            if not restored:
+                headers = dict(scope.get("headers", []))
+                matched_path = (
+                    headers.get(b"x-matched-path")
+                    or headers.get(b"x-invoke-path")
+                    or headers.get(b"x-forwarded-uri")
+                    or headers.get(b"x-real-path")
+                )
+                if matched_path:
+                    decoded_path = matched_path.decode("utf-8", errors="ignore").split("?")[0]
+                    if decoded_path and decoded_path != "/api/index.py":
+                        scope["path"] = decoded_path
+                        scope["raw_path"] = decoded_path.encode("utf-8")
+                        restored = True
+
+            # 3. Default fallback for naked /api/index.py
+            if not restored and scope.get("path") == "/api/index.py":
                 scope["path"] = "/"
                 scope["raw_path"] = b"/"
+
         await self.app(scope, receive, send)
 
 app.add_middleware(VercelPathFixMiddleware)
