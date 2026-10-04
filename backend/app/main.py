@@ -77,12 +77,35 @@ except Exception as e:
 app.include_router(api_v1_router, prefix=settings.API_V1_PREFIX)
 
 @app.get("/", tags=["Health"])
+@app.get("/api/index.py", include_in_schema=False)
 async def root():
     return {
         "app": settings.APP_NAME,
         "version": "1.0.0",
         "status": "online",
         "docs": "/docs",
+        "health": "/health",
+        "api": "/api/v1",
+    }
+
+@app.get("/api", tags=["Health"])
+@app.get("/api/", tags=["Health"], include_in_schema=False)
+@app.get("/api/v1", tags=["Health"])
+@app.get("/api/v1/", tags=["Health"], include_in_schema=False)
+async def api_root():
+    return {
+        "app": settings.APP_NAME,
+        "version": "1.0.0",
+        "status": "online",
+        "docs": "/docs",
+        "endpoints": {
+            "auth_me": "/api/v1/auth/me",
+            "auth_login": "/api/v1/auth/login",
+            "downloader_process": "/api/v1/downloader/process",
+            "inpaint_image": "/api/v1/inpaint/image",
+            "inpaint_video": "/api/v1/inpaint/video",
+            "task_status": "/api/v1/tasks/{task_id}",
+        },
     }
 
 @app.get("/health", tags=["Health"], status_code=status.HTTP_200_OK)
