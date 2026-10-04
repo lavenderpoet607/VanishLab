@@ -30,9 +30,17 @@ class Settings(BaseSettings):
     STANDALONE_MODE: bool = False
 
     @property
+    def is_standalone(self) -> bool:
+        if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+            if not self.DATABASE_URL:
+                return True
+        return self.STANDALONE_MODE
+
+    @property
     def async_database_url(self) -> str:
-        if self.STANDALONE_MODE:
-            return "sqlite+aiosqlite:///./vanishlab.db"
+        if self.is_standalone:
+            db_path = "/tmp/vanishlab.db" if (os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME")) else "./vanishlab.db"
+            return f"sqlite+aiosqlite:///{db_path}"
         if self.DATABASE_URL:
             return self.DATABASE_URL
         return (
@@ -42,8 +50,9 @@ class Settings(BaseSettings):
 
     @property
     def sync_database_url(self) -> str:
-        if self.STANDALONE_MODE:
-            return "sqlite:///./vanishlab.db"
+        if self.is_standalone:
+            db_path = "/tmp/vanishlab.db" if (os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME")) else "./vanishlab.db"
+            return f"sqlite:///{db_path}"
         if self.DATABASE_URL_SYNC:
             return self.DATABASE_URL_SYNC
         return (

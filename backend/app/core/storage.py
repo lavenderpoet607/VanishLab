@@ -24,10 +24,21 @@ class S3StorageService:
         self.access_key = settings.S3_ACCESS_KEY
         self.secret_key = settings.S3_SECRET_KEY
         self.region = settings.S3_REGION
-        self.local_dir = os.path.abspath(os.path.join(os.getcwd(), "data", "storage"))
-        os.makedirs(self.local_dir, exist_ok=True)
+        import tempfile
+        if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+            self.local_dir = os.path.join(tempfile.gettempdir(), "vanishlab", "storage")
+        else:
+            self.local_dir = os.path.abspath(os.path.join(os.getcwd(), "data", "storage"))
+        try:
+            os.makedirs(self.local_dir, exist_ok=True)
+        except OSError:
+            self.local_dir = os.path.join(tempfile.gettempdir(), "vanishlab", "storage")
+            try:
+                os.makedirs(self.local_dir, exist_ok=True)
+            except OSError:
+                pass
 
-        self._s3_available = not settings.STANDALONE_MODE
+        self._s3_available = not settings.is_standalone
         self._client = None
 
         if self._s3_available:
@@ -51,21 +62,30 @@ class S3StorageService:
     def ensure_bucket_exists(self) -> None:
         """Create bucket if S3 is active, or ensure local storage directory exists."""
         if not self._s3_available or self._client is None:
-            os.makedirs(self.local_dir, exist_ok=True)
+            try:
+                os.makedirs(self.local_dir, exist_ok=True)
+            except OSError:
+                pass
             logger.info("Local standalone storage ready at: %s", self.local_dir)
             return
 
         try:
             self._client.head_bucket(Bucket=self.bucket_name)
             logger.info("S3 Bucket '%s' verified.", self.bucket_name)
-        except (ClientError, EndpointConnectionError) as e:
+        except (ClientError, EndpointConnectionError, Exception) as e:
             logger.warning("S3 unreachable (%s). Falling back to local storage.", e)
             self._s3_available = False
-            os.makedirs(self.local_dir, exist_ok=True)
+            try:
+                os.makedirs(self.local_dir, exist_ok=True)
+            except OSError:
+                pass
 
     def _get_local_path(self, key: str) -> str:
         full_path = os.path.join(self.local_dir, key.replace("/", os.sep))
-        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+        try:
+            os.makedirs(os.path.dirname(full_path), exist_ok=True)
+        except OSError:
+            pass
         return full_path
 
     def upload_file_obj(

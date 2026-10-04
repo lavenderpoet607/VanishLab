@@ -34,10 +34,11 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning("Storage bucket verification warning: %s", e)
 
-    try:
-        auto_extract_browser_cookies()
-    except Exception as e:
-        logger.debug("Startup browser cookie sync encountered: %s", e)
+    if not os.environ.get("VERCEL") and not os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        try:
+            auto_extract_browser_cookies()
+        except Exception as e:
+            logger.debug("Startup browser cookie sync encountered: %s", e)
 
     yield
 
@@ -67,8 +68,11 @@ register_exception_handlers(app)
 import os
 from fastapi.staticfiles import StaticFiles
 
-os.makedirs(storage_service.local_dir, exist_ok=True)
-app.mount("/media", StaticFiles(directory=storage_service.local_dir), name="media")
+try:
+    os.makedirs(storage_service.local_dir, exist_ok=True)
+    app.mount("/media", StaticFiles(directory=storage_service.local_dir), name="media")
+except Exception as e:
+    logger.warning("Could not mount /media directory: %s", e)
 
 app.include_router(api_v1_router, prefix=settings.API_V1_PREFIX)
 
@@ -100,7 +104,7 @@ async def health_check():
         health_status["status"] = "degraded"
         health_status["services"]["database"] = f"error: {str(e)}"
 
-    if settings.STANDALONE_MODE:
+    if settings.is_standalone:
         health_status["services"]["redis"] = "standalone_internal_queue"
     else:
         try:

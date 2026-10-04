@@ -1,3 +1,9 @@
-# Ignore backend from Vercel Serverless bundling
-backend/
-.venv/
+# Ignore large client and development assets from backend deployment
+frontend/
+postman/
+.vscode/
+.idea/
+*.bat
+*.ps1
+*.vbs
+vanishlab.db
