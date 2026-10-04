@@ -63,6 +63,33 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class VercelPathFixMiddleware:
+    """Restores original request path rewritten by Vercel serverless proxy."""
+
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope.get("type") == "http":
+            headers = dict(scope.get("headers", []))
+            matched_path = (
+                headers.get(b"x-matched-path")
+                or headers.get(b"x-invoke-path")
+                or headers.get(b"x-forwarded-uri")
+                or headers.get(b"x-real-path")
+            )
+            if matched_path:
+                decoded_path = matched_path.decode("utf-8", errors="ignore").split("?")[0]
+                if decoded_path and decoded_path != "/api/index.py":
+                    scope["path"] = decoded_path
+                    scope["raw_path"] = decoded_path.encode("utf-8")
+            elif scope.get("path") == "/api/index.py":
+                scope["path"] = "/"
+                scope["raw_path"] = b"/"
+        await self.app(scope, receive, send)
+
+app.add_middleware(VercelPathFixMiddleware)
+
 register_exception_handlers(app)
 
 import os
@@ -77,7 +104,6 @@ except Exception as e:
 app.include_router(api_v1_router, prefix=settings.API_V1_PREFIX)
 
 @app.get("/", tags=["Health"])
-@app.get("/api/index.py", include_in_schema=False)
 async def root():
     return {
         "app": settings.APP_NAME,
